@@ -24,7 +24,7 @@ Manual transmission, Petrol fuel, Used
 # ROOT = 'https://www.autotrader.co.za/cars-for-sale/western-cape/p-9/hatchback-bodytype?price=less-than-150000&year=more-than-2014&mileage=less-than-90000&transmission=Manual&fueltype=Petrol&isused=True'
 ROOT = 'https://www.autotrader.co.za/cars-for-sale/western-cape/p-9?isused=True'
 WEBSITE = 'autotradercoza'
-PICKLE_PATH = 'autotrader_wc.pkl'
+PICKLE_PATH = 'generated_files/autotrader_wc.pkl'
 print('done')
 
 

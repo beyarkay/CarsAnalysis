@@ -27,7 +27,7 @@ DOMAIN = 'https://www.surf4cars.co.za/showroom/'
 # ROOT = 'https://www.surf4cars.co.za/showroom/showroom.aspx?s_makestr=&s_rangestr=&s_modelstr=&s_minvalue=0&s_maxvalue=0&s_province=2&s_maxmileage=90000&s_yearfrom=2014&uid=&s_trans=2&s_fuel=3&s_body=8&s_seller=0&s_dg=&s_provinceStr=Western+Cape&s_vehicletype=used&s_colour=0&sortby=0&s_modelrangeid=&s_regionid=0&s_region=&page=1'
 ROOT = 'https://www.surf4cars.co.za/showroom/?s_makestr=&s_rangestr=&s_modelstr=&s_minvalue=0&s_maxvalue=0&s_province=2&s_maxmileage=0&s_yearfrom=0&uid=&s_trans=0&s_fuel=0&s_body=0&s_seller=0&s_dg=&s_provinceStr=Western%20Cape&s_vehicletype=used&s_colour=0&sortby=0&s_modelrangeid=&s_regionid=0&s_region='
 WEBSITE = 'surf4carscoza'
-PICKLE_PATH = 'surf4cars_wc.pkl'
+PICKLE_PATH = 'generated_files/surf4cars_wc.pkl'
 print('done')
 
 
@@ -68,7 +68,7 @@ def grow_from_root_url(root_url, driver, df=None, verbose=True, limit=-1):
     ) * 25
     print(' done', flush=True)
 
-    if not os.path.exists('surf4cars_links.txt'):
+    if not os.path.exists('generated_files/surf4cars_links.txt'):
         listing_links = []
         pbar = tqdm(total=math.ceil(estimate / 25))
         while True:
@@ -95,10 +95,10 @@ def grow_from_root_url(root_url, driver, df=None, verbose=True, limit=-1):
             except selexcept.ElementClickInterceptedException:  # We've reached the end
                 break
         pbar.close()
-        with open('surf4cars_links.txt', 'w') as f:
+        with open('generated_files/surf4cars_links.txt', 'w') as f:
             f.writelines([l + '\n' for l in listing_links])
     else:
-        with open('surf4cars_links.txt', 'r') as f:
+        with open('generated_files/surf4cars_links.txt', 'r') as f:
             listing_links = [l.strip() for l in f.readlines()]
 
     cars = []

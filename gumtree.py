@@ -28,7 +28,7 @@ Manual transmission, Petrol fuel, Used
 # ROOT = 'https://www.gumtree.co.za/s-cars-bakkies/western-cape/petrol~hatchback~manual/v1c9077l3100001a3fubttrp1?cy=2014,&pr=,150000&km=,90000&priceType=FIXED'
 ROOT = 'https://www.gumtree.co.za/s-cars-bakkies/western-cape/hatchback/v1c9077l3100001a1btp1?priceType=FIXED'
 WEBSITE = 'gumtreecoza'
-PICKLE_PATH = 'gumtree_wc.pkl'
+PICKLE_PATH = 'generated_files/gumtree_wc.pkl'
 print('done')
 
 
@@ -73,7 +73,7 @@ def grow_from_root_url(root_url, driver, df=None, verbose=True, limit=-1):
     #     print(f'\t({len(df)}) No new properties in {root_url.split("/")[4].title()}')
     #     return df
 
-    if not os.path.exists('gumtree_links.txt'):
+    if not os.path.exists('generated_files/gumtree_links.txt'):
         listing_links = []
         pbar = tqdm(total=math.ceil(estimate / 20))
         while True:
@@ -110,10 +110,10 @@ def grow_from_root_url(root_url, driver, df=None, verbose=True, limit=-1):
                 break
         pbar.close()
         # listing_links = list(set(listing_links))
-        with open('gumtree_links.txt', 'w') as f:
+        with open('generated_files/gumtree_links.txt', 'w') as f:
             f.writelines([l + '\n' for l in listing_links])
     else:
-        with open('gumtree_links.txt', 'r') as f:
+        with open('generated_files/gumtree_links.txt', 'r') as f:
             listing_links = [l.strip() for l in f.readlines()]
 
     # try:

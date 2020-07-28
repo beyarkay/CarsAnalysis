@@ -28,7 +28,7 @@ Manual transmission, Petrol fuel, Used
 # ROOT = 'https://www.cars.co.za/searchVehicle.php?new_or_used=Used&make_model=&vfs_area=Western+Cape&agent_locality=&price_range=50000+-+74999%7C75000+-+99999%7C100000+-+124999%7C125000+-+149999&os=&locality=&commercial_type=&body_type_exact=Hatchback&transmission=off&fuel_type=p&login_type=&mapped_colour=&vfs_year=2020+-+2020%7C2019+-+2019%7C2018+-+2018%7C2017+-+2017%7C2016+-+2016%7C2015+-+2015%7C2014+-+2014&vfs_mileage=0+-+4999%7C5000+-+9999%7C10000+-+49999%7C50000+-+74999%7C75000+-+99999&vehicle_axle_config=&keyword=&sort=vfs_price'
 ROOT = 'https://www.cars.co.za/searchVehicle.php?new_or_used=Used&make_model=&vfs_area=Western+Cape&agent_locality=&price_range=&os='
 WEBSITE = 'carscoza'
-PICKLE_PATH = 'cars_wc.pkl'
+PICKLE_PATH = 'generated_files/cars_wc.pkl'
 print('done')
 
 
@@ -69,7 +69,7 @@ def grow_from_root_url(root_url, driver, df=None, verbose=True, limit=-1):
     estimate = int(re.sub(r'\d+ - \d+ of ', '', text_estimate).strip())
     print(' done', flush=True)
 
-    if not os.path.exists('cars_links.txt'):
+    if not os.path.exists('generated_files/cars_links.txt'):
         listing_links = []
         pbar = tqdm(total=math.ceil(estimate / 20))
         while True:
@@ -107,10 +107,10 @@ def grow_from_root_url(root_url, driver, df=None, verbose=True, limit=-1):
             except selexcept.NoSuchElementException:
                 break
         pbar.close()
-        with open('cars_links.txt', 'w') as f:
+        with open('generated_files/cars_links.txt', 'w') as f:
             f.writelines([l + '\n' for l in listing_links])
     else:
-        with open('cars_links.txt', 'r') as f:
+        with open('generated_files/cars_links.txt', 'r') as f:
             listing_links = [l.strip() for l in f.readlines()]
 
     cars = []

@@ -14,12 +14,12 @@ pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 
-PICKLE_PATH = 'main.pkl'
+PICKLE_PATH = 'generated_files/main.pkl'
 PICKLES = [
-    'autotrader_wc.pkl',
-    'cars_wc.pkl',
-    'gumtree_wc.pkl',
-    'surf4cars_wc.pkl',
+    'generated_files/autotrader_wc.pkl',
+    'generated_files/cars_wc.pkl',
+    'generated_files/gumtree_wc.pkl',
+    'generated_files/surf4cars_wc.pkl',
 ]
 print('done')
 
