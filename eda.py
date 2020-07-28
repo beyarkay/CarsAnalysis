@@ -26,7 +26,6 @@ print('done')
 
 def main():
     df = calc_derivatives(join_together(PICKLES))
-    # df = calc_derivatives(pd.read_pickle(PICKLE_PATH))
     low_zar, high_zar = df['price'].quantile([0.05, 0.95]).to_list()
     low_kms, high_kms = df['kms'].quantile([0.05, 0.95]).to_list()
     top_makes = df['make'].value_counts()[:30].index.to_list()
@@ -36,13 +35,13 @@ def main():
         (df.kms <= high_kms) &
         (df.kms >= low_kms) &
         (df.year >= 2000) &
-        (df['make'].isin(['mercedes-benz']))
+        (df['make'].isin(top_makes))
         ]
     df['year'] = df['year'].astype('category')
     x = 'price'
     y = 'kms'
     hue = 'year'
-    facet = 'model'
+    facet = 'make'
     df[facet] = df[facet].cat.remove_unused_categories()
     g = sns.FacetGrid(df, col=facet, col_wrap=5, palette='cubehelix', hue=hue)
     g.map(plt.scatter, x, y, alpha=0.6)
@@ -50,6 +49,8 @@ def main():
     plt.subplots_adjust(top=0.9)
     g.fig.suptitle(f'{x}-{y}({hue}-{facet})')
     plt.savefig(f'{x}-{y}({hue}-{facet})')
+
+    # df = df[df['price'] >= 1_000_000]
 
     # df.sort_values('price')[useful]
 
@@ -99,6 +100,55 @@ def plot_each_make():
             g.fig.suptitle(f'{make.title()})')
             plt.savefig(f'per_make/{make}-{x}-{y}({hue}-{facet})')
 
+def plot_expensive():
+    expensives = [
+        'jaguar',
+        'porsche',
+        'mercedes-amg',
+        'bmw',
+        'ferrari',
+        'mercedes-benz',
+    ]
+    df = calc_derivatives(join_together(PICKLES))
+    df = df[(df['make'].isin(expensives)) &
+            (df['kms'] <= 500_000)]
+    df['year'] = df['year'].astype('category')
+    x = 'price'
+    y = 'kms'
+    hue = 'year'
+    facet = 'make'
+    df[facet] = df[facet].cat.remove_unused_categories()
+    g = sns.FacetGrid(df, col=facet, col_wrap=2, palette='cubehelix', hue=hue)
+    g.map(plt.scatter, x, y, alpha=0.6)
+    g.add_legend()
+    plt.subplots_adjust(top=0.9)
+    g.fig.suptitle(f'{x}-{y}({hue}-{facet}) ZAR >= 1000000')
+    plt.savefig(f'{x}-{y}({hue}-{facet}) ZAR >= 1000000')
+
+def plot_heavy_duty():
+    makes = [
+        'isuzu',
+        'land-rover',
+        'land rover',
+        'jeep',
+    ]
+    df = calc_derivatives(join_together(PICKLES))
+    df = df[(df['make'].isin(makes)) &
+            (df['price'] <= 1_500_000 ) &
+            (df['kms'] <= 400_000 )
+            ]
+    df['year'] = df['year'].astype('category')
+    x = 'price'
+    y = 'kms'
+    hue = 'year'
+    facet = 'make'
+    df[facet] = df[facet].cat.remove_unused_categories()
+    g = sns.FacetGrid(df, col=facet, col_wrap=2, palette='cubehelix', hue=hue)
+    g.map(plt.scatter, x, y, alpha=0.6)
+    g.add_legend()
+    plt.subplots_adjust(top=0.9)
+    g.fig.suptitle(f'{x}-{y}({hue}-{facet}) heavy duty')
+    plt.savefig(f'price-kms(year-make)heavy_duty.png')
 
 def join_together(paths):
     dfs = []
@@ -125,26 +175,11 @@ def join_together(paths):
     df[categoricals] = df[categoricals].astype('category')
     return df
 
-
 def calc_derivatives(df):
     df['kms_per_year'] = df['kms'] / (2021 - df['year'])
     df['zar_100km'] = df['price'] * df['kms'] / 100.0
     return df
 
-
-def parse_variants():
-    variants = [str(variant).lower() for variant in df.variant.unique().to_list()]
-    numeric_variants = [variant for variant in variants if re.search(r'(v)?\d+(\.\d+)?(-l)?', variant)]
-    non_numeric_variants = [variant for variant in variants if not re.search(r'(v)?\d+(\.\d+)?(-l)?', variant)]
-    def assign_variant(title):
-        variants = [variant for variant in non_numeric_variants if re.search(f'\s+{variant}\s+')]
-        if not variants:
-            variants = [variant for variant in numeric_variants if variant in title.lower()]
-        if len(variants) > 1:
-            print(title, variants)
-        return variants[0] if variants else None
-
-    df['variant_parsed'] = df['title'].apply(assign_variant)
 
 
 if __name__ == '__main__':
