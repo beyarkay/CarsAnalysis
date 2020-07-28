@@ -1,0 +1,8 @@
+tqdm
+numpy
+selenium
+pandas
+beautifulsoup4
+requests
+seaborn
+matplotlib
